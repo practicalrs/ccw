@@ -1,7 +1,7 @@
 use crate::{Result, config::Config};
 use std::{fs::read_to_string, sync::Arc};
 
-pub async fn read(config: Arc<Config>) -> Result<String> {
+pub fn read(config: &Arc<Config>) -> Result<String> {
     let mut result = String::new();
     let file_content = read_to_string(config.file.clone())?;
 

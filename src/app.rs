@@ -1,4 +1,4 @@
-use crate::{Result, config, file};
+use crate::{Result, checker, config, file};
 use clap::Parser;
 use std::sync::Arc;
 
@@ -26,9 +26,10 @@ pub async fn run() -> Result<()> {
     let args = Args::parse();
     let config = Arc::new(config::load(args)?);
 
-    let content = file::read(config.clone()).await?;
+    let code = file::read(&config)?;
+    let result = checker::run(config, &code).await?;
 
-    println!("content = {content}");
+    println!("result = {result}");
 
     Ok(())
 }

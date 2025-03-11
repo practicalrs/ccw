@@ -3,6 +3,7 @@
 use std::error::Error;
 
 mod app;
+mod checker;
 mod config;
 mod error;
 mod file;
