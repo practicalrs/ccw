@@ -13,8 +13,13 @@ Only comment when you find something suspicious. Otherwise, say that the code lo
 pub const SYSTEM_PROMPT_FINDING_PROBLEMS: &str = "You need to find problems with this code.
 Order problems from more to less serious.
 Only point out problems that are:
+- cryptographic errors
+- documentation errors
+- logic errors
+- overflow errors
 - security bugs
-- documentation bugs";
+- unsafe code bugs
+Or similar problems that may lead to security-related problems.";
 
 pub const SYSTEM_PROMPT_ANSWER_TEMPLATE: &str =
     "Use the following template for describing problems:
