@@ -49,12 +49,22 @@ pub async fn run(config: Arc<Config>, code: &str) -> Result<String> {
 
     let prompt = format!("Here is the code: {code}");
     let message = Message {
-        content: prompt,
+        content: prompt.clone(),
         role: "user".to_string(),
     };
     messages.push(message);
 
-    let response = ollama::request(config.clone(), messages.clone()).await?;
+    let mut length = 0;
+    length += SYSTEM_PROMPT.len();
+    length += SYSTEM_PROMPT_FINDING_PROBLEMS.len();
+    length += SYSTEM_PROMPT_ANSWER_TEMPLATE.len();
+    length += prompt.len();
+
+    let num_ctx = (length as u32 / 4) + 4096;
+
+    println!("num_ctx = {num_ctx}");
+
+    let response = ollama::request(config.clone(), messages.clone(), Some(num_ctx)).await?;
 
     Ok(response)
 }

@@ -29,7 +29,7 @@ pub async fn run() -> Result<()> {
     let code = file::read(&config)?;
     let result = checker::run(config, &code).await?;
 
-    println!("result = {result}");
+    println!("{result}");
 
     Ok(())
 }
