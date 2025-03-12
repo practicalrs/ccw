@@ -2,20 +2,20 @@ use crate::{Result, app::Args, error::Error};
 
 #[derive(Clone, Debug)]
 pub struct Config {
-    pub end_line: u32,
+    pub end_line: Option<u32>,
     pub file: String,
     pub model: Option<String>,
     pub ollama_host: String,
-    pub start_line: u32,
+    pub start_line: Option<u32>,
 }
 
 impl Config {
     pub fn new(
-        end_line: u32,
+        end_line: Option<u32>,
         file: String,
         model: Option<String>,
         ollama_host: String,
-        start_line: u32,
+        start_line: Option<u32>,
     ) -> Self {
         Self {
             end_line,

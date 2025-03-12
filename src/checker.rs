@@ -6,10 +6,15 @@ use crate::{
 use std::sync::Arc;
 
 pub const SYSTEM_PROMPT: &str = "Your role is code auditing.
-You will receive a fragment of code of a larger project.";
+You will receive a fragment of the code of a larger project.
+Don't point out issues that you are not 100% sure are bugs.
+Only comment when you find something suspicious. Otherwise, say that the code looks ok.";
 
 pub const SYSTEM_PROMPT_FINDING_PROBLEMS: &str = "You need to find problems with this code.
-Order problems from more to less serious.";
+Order problems from more to less serious.
+Only point out problems that are:
+- security bugs
+- documentation bugs";
 
 pub const SYSTEM_PROMPT_ANSWER_TEMPLATE: &str =
     "Use the following template for describing problems:
@@ -18,7 +23,8 @@ Problem summary
 
 Problem detailed description
 
-Optional sample code that triggers an error";
+Optional sample code that triggers an error
+==========";
 
 pub async fn run(config: Arc<Config>, code: &str) -> Result<String> {
     let mut messages = vec![];

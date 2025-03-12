@@ -5,14 +5,18 @@ pub fn read(config: &Arc<Config>) -> Result<String> {
     let mut result = String::new();
     let file_content = read_to_string(config.file.clone())?;
 
-    let mut i = 1;
-    for line in file_content.lines() {
-        if i >= config.start_line && i <= config.end_line {
-            result.push_str(&format!("{line}\n"));
-        }
+    if let (Some(start_line), Some(end_line)) = (config.start_line, config.end_line) {
+        let mut i = 1;
+        for line in file_content.lines() {
+            if i >= start_line && i <= end_line {
+                result.push_str(&format!("{line}\n"));
+            }
 
-        i += 1;
-    }
+            i += 1;
+        }
+    } else {
+        result = file_content;
+    };
 
     Ok(result)
 }

@@ -7,7 +7,7 @@ use std::sync::Arc;
 pub struct Args {
     /// End line
     #[arg(long, short)]
-    pub end_line: u32,
+    pub end_line: Option<u32>,
 
     /// File
     #[arg(long, short)]
@@ -19,7 +19,7 @@ pub struct Args {
 
     /// Start line
     #[arg(long, short)]
-    pub start_line: u32,
+    pub start_line: Option<u32>,
 }
 
 pub async fn run() -> Result<()> {

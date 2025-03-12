@@ -6,7 +6,7 @@ use std::sync::Arc;
 use tokio::time::Duration;
 
 pub const DEFAULT_CODE_MODEL: &str = "qwen2.5-coder:3b";
-pub const DEFAULT_CODE_NUM_CTX: u32 = 4096;
+pub const DEFAULT_CODE_NUM_CTX: u32 = 16384;
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct Message {
@@ -30,12 +30,14 @@ pub struct OllamaResponse {
 #[derive(Debug, Serialize)]
 pub struct Options {
     pub num_ctx: u32,
+    pub temperature: f32,
 }
 
 #[async_recursion]
 pub async fn request(config: Arc<Config>, messages: Vec<Message>) -> Result<String> {
     let options = Options {
         num_ctx: DEFAULT_CODE_NUM_CTX,
+        temperature: 0.0,
     };
 
     let model = config
