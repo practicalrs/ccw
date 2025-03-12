@@ -34,7 +34,11 @@ pub struct Options {
 }
 
 #[async_recursion]
-pub async fn request(config: Arc<Config>, messages: Vec<Message>, num_ctx: Option<u32>) -> Result<String> {
+pub async fn request(
+    config: Arc<Config>,
+    messages: Vec<Message>,
+    num_ctx: Option<u32>,
+) -> Result<String> {
     let options = Options {
         num_ctx: num_ctx.unwrap_or(DEFAULT_CODE_NUM_CTX),
         temperature: 0.0,

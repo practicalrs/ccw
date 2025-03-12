@@ -65,7 +65,7 @@ pub async fn run(config: Arc<Config>, code: &str) -> Result<String> {
     length += SYSTEM_PROMPT_ANSWER_TEMPLATE.len();
     length += prompt.len();
 
-    let num_ctx = (length as u32 / 4) + 4096;
+    let num_ctx = (u32::try_from(length)? / 4) + 4096;
 
     println!("num_ctx = {num_ctx}");
 

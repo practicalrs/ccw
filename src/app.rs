@@ -1,4 +1,5 @@
 use crate::{Result, checker, config, file};
+use chrono::Utc;
 use clap::Parser;
 use std::sync::Arc;
 
@@ -23,6 +24,8 @@ pub struct Args {
 }
 
 pub async fn run() -> Result<()> {
+    let start_date = Utc::now();
+
     let args = Args::parse();
     let config = Arc::new(config::load(args)?);
 
@@ -30,6 +33,11 @@ pub async fn run() -> Result<()> {
     let result = checker::run(config, &code).await?;
 
     println!("{result}");
+
+    let end_date = Utc::now();
+
+    let delta = end_date - start_date;
+    println!("delta = {}", delta.num_seconds());
 
     Ok(())
 }

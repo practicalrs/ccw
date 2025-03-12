@@ -5,6 +5,10 @@ edition = "2024"
 
 [dependencies]
 async-recursion = "1.1"
+chrono = { version = "0.4", default-features = false, features = [
+    "now",
+    "serde"
+] }
 clap = { version = "4.5", default-features = false, features = [
     "derive",
     "env",
