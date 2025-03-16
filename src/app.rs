@@ -1,22 +1,29 @@
 use crate::{Result, checker, config, file};
-use chrono::Utc;
 use clap::Parser;
 use std::sync::Arc;
 
 #[derive(Debug, Parser)]
 #[command(about, author, long_about = None, version)]
 pub struct Args {
+    /// Dir
+    #[arg(long, short)]
+    pub dir: Option<String>,
+
     /// End line
     #[arg(long, short)]
     pub end_line: Option<u32>,
 
     /// File
     #[arg(long, short)]
-    pub file: String,
+    pub file: Option<String>,
 
     /// Ollama model
     #[arg(long, short)]
     pub model: Option<String>,
+
+    /// Skip larger than tokens
+    #[arg(long)]
+    pub skip_larger: Option<u32>,
 
     /// Start line
     #[arg(long, short)]
@@ -24,20 +31,16 @@ pub struct Args {
 }
 
 pub async fn run() -> Result<()> {
-    let start_date = Utc::now();
-
     let args = Args::parse();
     let config = Arc::new(config::load(args)?);
 
-    let code = file::read(&config)?;
-    let result = checker::run(config, &code).await?;
+    let files = file::read_files(&config)?;
 
-    println!("{result}");
+    for (file_name, code) in files {
+        println!("file_name = {file_name}");
 
-    let end_date = Utc::now();
-
-    let delta = end_date - start_date;
-    println!("delta = {}", delta.num_seconds());
+        checker::run(config.clone(), &code).await?;
+    }
 
     Ok(())
 }
