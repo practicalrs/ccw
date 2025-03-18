@@ -5,7 +5,7 @@ use serde::{Deserialize, Serialize};
 use std::sync::Arc;
 use tokio::time::Duration;
 
-pub const DEFAULT_CODE_MODEL: &str = "qwen2.5-coder:3b";
+pub const DEFAULT_CODE_MODEL: &str = "qwen2.5-coder:14b";
 pub const DEFAULT_CODE_NUM_CTX: u32 = 16384;
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -38,7 +38,12 @@ pub async fn request(
     config: Arc<Config>,
     messages: Vec<Message>,
     num_ctx: Option<u32>,
+    attempt: u8,
 ) -> Result<String> {
+    if attempt > config.max_attempts {
+        return Ok("".to_string());
+    }
+
     let options = Options {
         num_ctx: num_ctx.unwrap_or(DEFAULT_CODE_NUM_CTX),
         temperature: 0.0,
@@ -71,7 +76,9 @@ pub async fn request(
         Err(e) => {
             eprintln!("Error: {e}");
 
-            let response = request(config, messages, num_ctx).await;
+            let attempt = attempt + 1;
+
+            let response = request(config, messages, num_ctx, attempt).await;
 
             return response;
         }

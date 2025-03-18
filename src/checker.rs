@@ -79,7 +79,7 @@ pub async fn run(config: Arc<Config>, code: &str) -> Result<()> {
         }
     }
 
-    let result = ollama::request(config.clone(), messages.clone(), Some(num_ctx)).await?;
+    let result = ollama::request(config.clone(), messages.clone(), Some(num_ctx), 1).await?;
 
     println!("{result}");
 

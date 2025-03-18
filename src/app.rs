@@ -17,6 +17,10 @@ pub struct Args {
     #[arg(long, short)]
     pub file: Option<String>,
 
+    /// Max attempts
+    #[arg(long)]
+    pub max_attempts: Option<u8>,
+
     /// Ollama model
     #[arg(long, short)]
     pub model: Option<String>,

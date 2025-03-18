@@ -5,6 +5,7 @@ pub struct Config {
     pub dir: Option<String>,
     pub end_line: Option<u32>,
     pub file: Option<String>,
+    pub max_attempts: u8,
     pub model: Option<String>,
     pub ollama_host: String,
     pub skip_larger: Option<u32>,
@@ -16,6 +17,7 @@ impl Config {
         dir: Option<String>,
         end_line: Option<u32>,
         file: Option<String>,
+        max_attempts: u8,
         model: Option<String>,
         ollama_host: String,
         skip_larger: Option<u32>,
@@ -25,6 +27,7 @@ impl Config {
             dir,
             end_line,
             file,
+            max_attempts,
             model,
             ollama_host,
             skip_larger,
@@ -37,6 +40,7 @@ pub fn load(args: Args) -> Result<Config> {
     let dir = args.dir;
     let end_line = args.end_line;
     let file = args.file;
+    let max_attempts = args.max_attempts.unwrap_or(3);
     let model = args.model;
     let Ok(ollama_host) = std::env::var("OLLAMA_HOST") else {
         return Err(Box::new(Error::OllamaHostAddresMissing));
@@ -48,6 +52,7 @@ pub fn load(args: Args) -> Result<Config> {
         dir,
         end_line,
         file,
+        max_attempts,
         model,
         ollama_host,
         skip_larger,

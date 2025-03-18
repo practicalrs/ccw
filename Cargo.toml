@@ -27,7 +27,6 @@ tokio = { version = "1.44", default-features = false, features = [
 ] }
 walkdir = "2.5"
 
-
 [profile.release]
 codegen-units = 1
 lto = true
