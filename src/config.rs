@@ -13,6 +13,7 @@ pub struct Config {
 }
 
 impl Config {
+    #[allow(clippy::too_many_arguments)]
     pub fn new(
         dir: Option<String>,
         end_line: Option<u32>,

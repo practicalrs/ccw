@@ -69,7 +69,7 @@ pub async fn run(config: Arc<Config>, code: &str) -> Result<()> {
 
     let num_ctx = (u32::try_from(length)? / 4) + 4096;
 
-    println!("num_ctx = {num_ctx}");
+    println!("Context window = {num_ctx}");
 
     if let Some(skip_larger) = config.skip_larger {
         if num_ctx > skip_larger {
@@ -86,7 +86,7 @@ pub async fn run(config: Arc<Config>, code: &str) -> Result<()> {
     let end_date = Utc::now();
 
     let delta = end_date - start_date;
-    println!("delta = {}", delta.num_seconds());
+    println!("Executed in {} seconds.\n", delta.num_seconds());
 
     Ok(())
 }

@@ -39,11 +39,15 @@ pub async fn run() -> Result<()> {
     let config = Arc::new(config::load(args)?);
 
     let files = file::read_files(&config)?;
+    let files_count = files.len();
+    let mut i = 1;
 
     for (file_name, code) in files {
-        println!("file_name = {file_name}");
+        println!("File {i} of {files_count} {file_name}");
 
         checker::run(config.clone(), &code).await?;
+
+        i += 1;
     }
 
     Ok(())
