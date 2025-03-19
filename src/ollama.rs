@@ -41,7 +41,7 @@ pub async fn request(
     attempt: u8,
 ) -> Result<String> {
     if attempt > config.max_attempts {
-        return Ok("".to_string());
+        return Ok(String::new());
     }
 
     let options = Options {

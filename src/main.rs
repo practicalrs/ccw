@@ -8,6 +8,7 @@ mod config;
 mod error;
 mod file;
 mod ollama;
+mod performance;
 
 type Result<T> = std::result::Result<T, Box<dyn Error + Send + Sync>>;
 

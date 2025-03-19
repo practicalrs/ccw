@@ -8,18 +8,11 @@ use std::sync::Arc;
 
 pub const SYSTEM_PROMPT: &str = "Your role is code auditing.
 You will receive a fragment of the code of a larger project.
-Only comment when you find something suspicious. Otherwise, say that the code looks ok.";
+Only comment when you find something that can be improved. Otherwise, say that the code looks ok.";
 
-pub const SYSTEM_PROMPT_FINDING_PROBLEMS: &str = "You need to find problems with this code.
-Order problems from more to less serious.
-Only point out problems that are:
-- cryptographic errors
-- documentation errors
-- logic errors
-- overflow errors
-- security bugs
-- unsafe code bugs
-Or similar problems that may lead to security-related problems.";
+pub const SYSTEM_PROMPT_FINDING_PROBLEMS: &str =
+    "You need to find problems with the performance of this code.
+Order problems from more to less serious.";
 
 pub const SYSTEM_PROMPT_ANSWER_TEMPLATE: &str =
     "Use the following template for describing problems:

@@ -1,4 +1,9 @@
-use crate::{Result, app::Args, error::Error};
+use crate::{
+    Result,
+    app::{Args, Mode},
+    error::Error,
+};
+use std::str::FromStr;
 
 #[derive(Clone, Debug)]
 pub struct Config {
@@ -6,6 +11,7 @@ pub struct Config {
     pub end_line: Option<u32>,
     pub file: Option<String>,
     pub max_attempts: u8,
+    pub mode: Mode,
     pub model: Option<String>,
     pub ollama_host: String,
     pub skip_larger: Option<u32>,
@@ -19,6 +25,7 @@ impl Config {
         end_line: Option<u32>,
         file: Option<String>,
         max_attempts: u8,
+        mode: Mode,
         model: Option<String>,
         ollama_host: String,
         skip_larger: Option<u32>,
@@ -29,6 +36,7 @@ impl Config {
             end_line,
             file,
             max_attempts,
+            mode,
             model,
             ollama_host,
             skip_larger,
@@ -42,6 +50,11 @@ pub fn load(args: Args) -> Result<Config> {
     let end_line = args.end_line;
     let file = args.file;
     let max_attempts = args.max_attempts.unwrap_or(3);
+    let mode = if let Some(mode) = args.mode {
+        Mode::from_str(&mode)?
+    } else {
+        Mode::Checker
+    };
     let model = args.model;
     let Ok(ollama_host) = std::env::var("OLLAMA_HOST") else {
         return Err(Box::new(Error::OllamaHostAddresMissing));
@@ -54,6 +67,7 @@ pub fn load(args: Args) -> Result<Config> {
         end_line,
         file,
         max_attempts,
+        mode,
         model,
         ollama_host,
         skip_larger,

@@ -1,6 +1,6 @@
-use crate::{Result, checker, config, file};
+use crate::{Result, checker, config, error::Error, file, performance};
 use clap::Parser;
-use std::sync::Arc;
+use std::{str::FromStr, sync::Arc};
 
 #[derive(Debug, Parser)]
 #[command(about, author, long_about = None, version)]
@@ -21,6 +21,10 @@ pub struct Args {
     #[arg(long)]
     pub max_attempts: Option<u8>,
 
+    /// Mode
+    #[arg(long)]
+    pub mode: Option<String>,
+
     /// Ollama model
     #[arg(long, short)]
     pub model: Option<String>,
@@ -34,6 +38,26 @@ pub struct Args {
     pub start_line: Option<u32>,
 }
 
+#[derive(Clone, Debug)]
+pub enum Mode {
+    Checker,
+    Performance,
+}
+
+impl FromStr for Mode {
+    type Err = Error;
+
+    fn from_str(s: &str) -> std::result::Result<Self, Self::Err> {
+        let lowercase = s.to_string().to_lowercase();
+        let s = lowercase.as_str();
+        match s {
+            "checker" => Ok(Mode::Checker),
+            "performance" => Ok(Mode::Performance),
+            _ => Ok(Mode::Checker),
+        }
+    }
+}
+
 pub async fn run() -> Result<()> {
     let args = Args::parse();
     let config = Arc::new(config::load(args)?);
@@ -45,7 +69,10 @@ pub async fn run() -> Result<()> {
     for (file_name, code) in files {
         println!("File {i} of {files_count} {file_name}");
 
-        checker::run(config.clone(), &code).await?;
+        match config.mode {
+            Mode::Checker => checker::run(config.clone(), &code).await?,
+            Mode::Performance => performance::run(config.clone(), &code).await?,
+        }
 
         i += 1;
     }
