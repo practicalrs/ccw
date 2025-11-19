@@ -1,6 +1,6 @@
-use crate::{Result, checker, config, error::Error, file, performance};
+use crate::{Result, checker, commit_summary, config, error::Error, file, performance};
 use clap::Parser;
-use std::{str::FromStr, sync::Arc};
+use std::{io::{stdin, Read}, str::FromStr, sync::Arc};
 
 #[derive(Debug, Parser)]
 #[command(about, author, long_about = None, version)]
@@ -41,6 +41,7 @@ pub struct Args {
 #[derive(Clone, Debug)]
 pub enum Mode {
     Checker,
+    CommitSummary,
     Performance,
 }
 
@@ -52,6 +53,7 @@ impl FromStr for Mode {
         let s = lowercase.as_str();
         match s {
             "checker" => Ok(Mode::Checker),
+            "commit_summary" => Ok(Mode::CommitSummary),
             "performance" => Ok(Mode::Performance),
             _ => Ok(Mode::Checker),
         }
@@ -62,19 +64,30 @@ pub async fn run() -> Result<()> {
     let args = Args::parse();
     let config = Arc::new(config::load(args)?);
 
-    let files = file::read_files(&config)?;
-    let files_count = files.len();
-    let mut i = 1;
+    match config.mode {
+        Mode::Checker | Mode::Performance => {
+            let files = file::read_files(&config)?;
+            let files_count = files.len();
+            let mut i = 1;
 
-    for (file_name, code) in files {
-        println!("File {i} of {files_count} {file_name}");
+            for (file_name, code) in files {
+                println!("File {i} of {files_count} {file_name}");
 
-        match config.mode {
-            Mode::Checker => checker::run(config.clone(), &code).await?,
-            Mode::Performance => performance::run(config.clone(), &code).await?,
+                match config.mode {
+                    Mode::Checker => checker::run(config.clone(), &code).await?,
+                    Mode::Performance => performance::run(config.clone(), &code).await?,
+                    _ => {},
+                }
+
+                i += 1;
+            }
         }
+        Mode::CommitSummary => {
+            let mut code = String::new();
+            stdin().read_to_string(&mut code)?;
 
-        i += 1;
+            commit_summary::run(config.clone(), &code).await?;
+        }
     }
 
     Ok(())
