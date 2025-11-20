@@ -1,4 +1,4 @@
-use crate::{Result, config::Config, error::Error};
+use crate::{Result, app, config::Config, error::Error};
 use async_recursion::async_recursion;
 use reqwest::StatusCode;
 use serde::{Deserialize, Serialize};
@@ -56,7 +56,7 @@ pub async fn request(
 
     let ollama_request = OllamaRequest {
         messages: messages.clone(),
-        model,
+        model: model.clone(),
         options,
         stream: false,
     };
@@ -88,7 +88,11 @@ pub async fn request(
 
                 let ollama_response: OllamaResponse = serde_json::from_str(&response_text)?;
 
-                return Ok(ollama_response.message.content);
+                let signature = app::signature(&model);
+
+                let response = format!("{}\n\n{signature}", ollama_response.message.content);
+
+                return Ok(response);
             }
         }
     }
