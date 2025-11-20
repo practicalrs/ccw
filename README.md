@@ -67,3 +67,19 @@ In this mode, the tool generates a summary of the code changes that can be used 
 ```sh
 git diff main | ccw --mode=commit_summary
 ```
+
+### Task comment
+
+In this mode, the tool generates a summary of the code changes that can be used as a template for a task comment. It also contains a list of suggestions on how to test code changes.
+
+```sh
+git diff main | ccw --mode=task_comment
+```
+
+### Task description
+
+In this mode, the tool generates a summary of the code changes that can be used as a template for a task title and description.
+
+```sh
+git diff main | ccw --mode=task_description
+```
