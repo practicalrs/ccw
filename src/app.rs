@@ -1,4 +1,4 @@
-use crate::{Result, checker, commit_summary, config, error::Error, file, performance};
+use crate::{Result, checker, commit_summary, config, error::Error, file, performance, task_description};
 use clap::Parser;
 use std::{
     io::{Read, stdin},
@@ -47,6 +47,7 @@ pub enum Mode {
     Checker,
     CommitSummary,
     Performance,
+    TaskDescription,
 }
 
 impl FromStr for Mode {
@@ -59,6 +60,7 @@ impl FromStr for Mode {
             "checker" => Ok(Mode::Checker),
             "commit_summary" => Ok(Mode::CommitSummary),
             "performance" => Ok(Mode::Performance),
+            "task_description" => Ok(Mode::TaskDescription),
             _ => Ok(Mode::Checker),
         }
     }
@@ -86,11 +88,15 @@ pub async fn run() -> Result<()> {
                 i += 1;
             }
         }
-        Mode::CommitSummary => {
+        Mode::CommitSummary | Mode::TaskDescription=> {
             let mut code = String::new();
             stdin().read_to_string(&mut code)?;
 
-            commit_summary::run(config.clone(), &code).await?;
+            match config.mode {
+                Mode::CommitSummary => commit_summary::run(config.clone(), &code).await?,
+                Mode::TaskDescription => task_description::run(config.clone(), &code).await?,
+                _ => {}
+            }
         }
     }
 

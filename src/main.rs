@@ -10,6 +10,7 @@ mod error;
 mod file;
 mod ollama;
 mod performance;
+mod task_description;
 
 type Result<T> = std::result::Result<T, Box<dyn Error + Send + Sync>>;
 
