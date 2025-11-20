@@ -8,27 +8,52 @@ use std::sync::Arc;
 
 pub const SYSTEM_PROMPT: &str = "Your role is code auditing.
 You will receive a fragment of the code of a larger project.
-Only comment when you find something suspicious. Otherwise, say that the code looks ok.";
+Only comment when you find something suspicious.
+Suspicious means:
+- incorrect security assumptions
+- dangerous API usage
+- misuse of cryptography
+- unsafely handling external input
+- race conditions or concurrency hazards
+- unsafe code blocks that can violate memory safety
+- panic / unwrap / expect in sensitive paths
+- integer overflows or unchecked arithmetic
+- flawed access control or authorization logic
+- dangerous file system or network usage
+- exposed secrets or keys
+Otherwise, say that the code looks ok.";
 
 pub const SYSTEM_PROMPT_FINDING_PROBLEMS: &str = "You need to find problems with this code.
 Order problems from more to less serious.
-Only point out problems that are:
-- cryptographic errors
-- documentation errors
-- logic errors
-- overflow errors
-- security bugs
-- unsafe code bugs
+Only point out problems such as:
+- cryptographic vulnerabilities or misuse
+- logic errors affecting security or correctness
+- overflow and boundary errors
+- unsafe Rust usage that may violate memory safety
+- misuse of unwrap(), expect(), or panic in production paths
+- insecure error handling
+- concurrency or race condition bugs
+- insecure file system or network access patterns
+- serialization / deserialization vulnerabilities
+- documentation inaccuracies affecting safe API usage
+- any issue that may lead to security vulnerabilities
 Or similar problems that may lead to security-related problems.";
 
 pub const SYSTEM_PROMPT_ANSWER_TEMPLATE: &str =
     "Use the following template for describing problems:
 ==========
 Problem summary
+(A short title capturing the security issue.)
 
 Problem detailed description
+- Why this is a security problem
+- How it can occur
+- What conditions or inputs trigger it
+- Potential impact/severity
 
-Optional sample code that triggers an error
+Relevant code snippet or simplified example (optional)
+
+Recommendation for how to fix the issue (required)
 ==========";
 
 pub async fn run(config: Arc<Config>, code: &str) -> Result<()> {
