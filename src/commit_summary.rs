@@ -6,11 +6,21 @@ use crate::{
 use chrono::Utc;
 use std::sync::Arc;
 
-pub const SYSTEM_PROMPT: &str = "Your role is code summarizing.
-You will receive a diff of the code of a larger project.
-Summarize the code changes that it makes.
-If the diff is short, try to summarize it in one or three sentences.
-If the diff is longer, try to summarize changes in points.";
+pub const SYSTEM_PROMPT: &str = "Your role is to summarize code changes for commit messages.
+
+You will receive a diff from a larger project.
+Your output must follow these rules:
+
+1. Produce a plain text summary of the changes.
+2. Do not use markdown of any kind. Avoid symbols such as #, *, -, _, `, or any formatting syntax.
+3. Do not include code blocks or quote the diff directly.
+4. The summary must contain only neutral, factual descriptions of the changes.
+5. If the diff is short, produce one to three concise sentences.
+6. If the diff is longer, produce a list of changes using plain text lines separated by newlines. Do not use bullets, dashes, or numbering; simply separate items with newlines.
+7. Do not invent changes not present in the diff.
+8. Never include characters or formatting that could be interpreted as a Git comment.
+
+Only output the final summary. Do not add commentary or disclaimers.";
 
 pub async fn run(config: Arc<Config>, code: &str) -> Result<()> {
     let start_date = Utc::now();
