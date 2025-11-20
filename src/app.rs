@@ -1,4 +1,6 @@
-use crate::{Result, checker, commit_summary, config, error::Error, file, performance, task_comment, task_description};
+use crate::{
+    Result, checker, commit_review, commit_summary, config, error::Error, file, performance, task_comment, task_description
+};
 use clap::Parser;
 use std::{
     io::{Read, stdin},
@@ -45,6 +47,7 @@ pub struct Args {
 #[derive(Clone, Debug)]
 pub enum Mode {
     Checker,
+    CommitReview,
     CommitSummary,
     Performance,
     TaskComment,
@@ -59,6 +62,7 @@ impl FromStr for Mode {
         let s = lowercase.as_str();
         match s {
             "checker" => Ok(Mode::Checker),
+            "commit_review" => Ok(Mode::CommitReview),
             "commit_summary" => Ok(Mode::CommitSummary),
             "performance" => Ok(Mode::Performance),
             "task_comment" => Ok(Mode::TaskComment),
@@ -90,11 +94,12 @@ pub async fn run() -> Result<()> {
                 i += 1;
             }
         }
-        Mode::CommitSummary | Mode::TaskComment | Mode::TaskDescription=> {
+        Mode::CommitReview | Mode::CommitSummary | Mode::TaskComment | Mode::TaskDescription => {
             let mut code = String::new();
             stdin().read_to_string(&mut code)?;
 
             match config.mode {
+                Mode::CommitReview => commit_review::run(config.clone(), &code).await?,
                 Mode::CommitSummary => commit_summary::run(config.clone(), &code).await?,
                 Mode::TaskComment => task_comment::run(config.clone(), &code).await?,
                 Mode::TaskDescription => task_description::run(config.clone(), &code).await?,

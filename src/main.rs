@@ -4,6 +4,7 @@ use std::error::Error;
 
 mod app;
 mod checker;
+mod commit_review;
 mod commit_summary;
 mod config;
 mod error;

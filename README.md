@@ -60,6 +60,14 @@ In this mode, the code is checked for the problems that may cause worse performa
 ccw --mode=performance --skip-larger=30000 -d /home/michal/projects/forks/rust/compiler/rustc_borrowck/
 ```
 
+### Commit review
+
+In this mode, the tool generates a review of the code changes.
+
+```sh
+git diff main | ccw --mode=commit_review
+```
+
 ### Commit summary
 
 In this mode, the tool generates a summary of the code changes that can be used as a template for a commit message.
