@@ -17,7 +17,7 @@ pub fn read(config: &Arc<Config>, file: &str) -> Result<String> {
         }
     } else {
         result = file_content;
-    };
+    }
 
     Ok(result)
 }

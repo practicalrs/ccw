@@ -96,12 +96,12 @@ pub async fn run(config: Arc<Config>, code: &str) -> Result<()> {
 
     println!("Context window = {num_ctx}");
 
-    if let Some(skip_larger) = config.skip_larger {
-        if num_ctx > skip_larger {
-            println!("Context too large. Skipping...");
+    if let Some(skip_larger) = config.skip_larger
+        && num_ctx > skip_larger
+    {
+        println!("Context too large. Skipping...");
 
-            return Ok(());
-        }
+        return Ok(());
     }
 
     let result = ollama::request(config.clone(), messages.clone(), Some(num_ctx), 1).await?;

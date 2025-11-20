@@ -29,7 +29,8 @@ Do NOT comment on:
 Only comment when you find a real and meaningful performance problem.
 Otherwise, say that the code looks ok.";
 
-pub const SYSTEM_PROMPT_FINDING_PROBLEMS: &str = "You need to find problems with the performance of this code.
+pub const SYSTEM_PROMPT_FINDING_PROBLEMS: &str =
+    "You need to find problems with the performance of this code.
 
 Order problems from more serious to less serious.
 
@@ -51,7 +52,8 @@ Examples of issues you should report:
 
 Only report meaningful performance issues. If unsure, state that the information is insufficient.";
 
-pub const SYSTEM_PROMPT_ANSWER_TEMPLATE: &str = "Use the following template for describing problems:
+pub const SYSTEM_PROMPT_ANSWER_TEMPLATE: &str =
+    "Use the following template for describing problems:
 ==========
 Problem summary
 
@@ -105,12 +107,12 @@ pub async fn run(config: Arc<Config>, code: &str) -> Result<()> {
 
     println!("Context window = {num_ctx}");
 
-    if let Some(skip_larger) = config.skip_larger {
-        if num_ctx > skip_larger {
-            println!("Context too large. Skipping...");
+    if let Some(skip_larger) = config.skip_larger
+        && num_ctx > skip_larger
+    {
+        println!("Context too large. Skipping...");
 
-            return Ok(());
-        }
+        return Ok(());
     }
 
     let result = ollama::request(config.clone(), messages.clone(), Some(num_ctx), 1).await?;

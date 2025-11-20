@@ -1,6 +1,10 @@
 use crate::{Result, checker, commit_summary, config, error::Error, file, performance};
 use clap::Parser;
-use std::{io::{stdin, Read}, str::FromStr, sync::Arc};
+use std::{
+    io::{Read, stdin},
+    str::FromStr,
+    sync::Arc,
+};
 
 #[derive(Debug, Parser)]
 #[command(about, author, long_about = None, version)]
@@ -76,7 +80,7 @@ pub async fn run() -> Result<()> {
                 match config.mode {
                     Mode::Checker => checker::run(config.clone(), &code).await?,
                     Mode::Performance => performance::run(config.clone(), &code).await?,
-                    _ => {},
+                    _ => {}
                 }
 
                 i += 1;
