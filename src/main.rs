@@ -12,6 +12,7 @@ mod file;
 mod ollama;
 mod performance;
 mod task_comment;
+mod task_criteria_check;
 mod task_description;
 
 type Result<T> = std::result::Result<T, Box<dyn Error + Send + Sync>>;

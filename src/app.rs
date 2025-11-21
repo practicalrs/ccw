@@ -1,5 +1,5 @@
 use crate::{
-    Result, checker, commit_review, commit_summary, config, error::Error, file, performance, task_comment, task_description
+    Result, checker, commit_review, commit_summary, config, error::Error, file, performance, task_comment, task_criteria_check, task_description
 };
 use clap::Parser;
 use std::{
@@ -51,6 +51,7 @@ pub enum Mode {
     CommitSummary,
     Performance,
     TaskComment,
+    TaskCriteriaCheck,
     TaskDescription,
 }
 
@@ -66,6 +67,7 @@ impl FromStr for Mode {
             "commit_summary" => Ok(Mode::CommitSummary),
             "performance" => Ok(Mode::Performance),
             "task_comment" => Ok(Mode::TaskComment),
+            "task_criteria_check" => Ok(Mode::TaskCriteriaCheck),
             "task_description" => Ok(Mode::TaskDescription),
             _ => Ok(Mode::Checker),
         }
@@ -94,7 +96,7 @@ pub async fn run() -> Result<()> {
                 i += 1;
             }
         }
-        Mode::CommitReview | Mode::CommitSummary | Mode::TaskComment | Mode::TaskDescription => {
+        Mode::CommitReview | Mode::CommitSummary | Mode::TaskComment | Mode::TaskCriteriaCheck | Mode::TaskDescription => {
             let mut code = String::new();
             stdin().read_to_string(&mut code)?;
 
@@ -102,6 +104,7 @@ pub async fn run() -> Result<()> {
                 Mode::CommitReview => commit_review::run(config.clone(), &code).await?,
                 Mode::CommitSummary => commit_summary::run(config.clone(), &code).await?,
                 Mode::TaskComment => task_comment::run(config.clone(), &code).await?,
+                Mode::TaskCriteriaCheck => task_criteria_check::run(config.clone(), &code).await?,
                 Mode::TaskDescription => task_description::run(config.clone(), &code).await?,
                 _ => {}
             }

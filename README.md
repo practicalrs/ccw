@@ -84,6 +84,15 @@ In this mode, the tool generates a summary of the code changes that can be used 
 git diff main | ccw --mode=task_comment
 ```
 
+### Task criteria check
+
+In this mode, the tool checks if the diff meets the acceptance criteria defined in the read file.
+
+```sh
+git diff main | ccw --mode=task_criteria_check --fil│
+│e=../tmp/acceptance_criteria.txt
+```
+
 ### Task description
 
 In this mode, the tool generates a summary of the code changes that can be used as a template for a task title and description.
