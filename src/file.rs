@@ -1,5 +1,5 @@
 use crate::{Result, config::Config};
-use std::{fs::read_to_string, sync::Arc};
+use std::{fs::read_to_string, path::Path, sync::Arc};
 use walkdir::WalkDir;
 
 pub fn read(config: &Arc<Config>, file: &str) -> Result<String> {
@@ -25,22 +25,55 @@ pub fn read(config: &Arc<Config>, file: &str) -> Result<String> {
 pub fn read_files(config: &Arc<Config>) -> Result<Vec<(String, String)>> {
     let mut result = vec![];
 
+    let allowed_extensions = vec![
+        // C
+        "c",
+        "h",
+        // C#
+        "cs",
+        // C++
+        "cpp",
+        "hpp",
+        "cc",
+        "hh",
+        "cxx",
+        "hxx",
+        // Go
+        "go",
+        // Java ;)
+        "java",
+        "js",
+        // Python
+        "py",
+        // Rust
+        "rs",
+        // TypeScript
+        "ts",
+    ];
+
     if let Some(dir) = &config.dir {
         for entry in WalkDir::new(dir) {
             let entry = entry?;
-            let file = format!("{}", entry.path().display());
-            if file.ends_with(".rs") {
-                let content = read(config, &file)?;
+            let path = entry.path();
 
-                result.push((file.clone(), content));
+            if let Some(ext) = path.extension().and_then(|s| s.to_str()) {
+                if allowed_extensions.contains(&ext) {
+                    let file = format!("{}", path.display());
+                    let content = read(config, &file)?;
+                    result.push((file, content));
+                }
             }
         }
     }
 
     if let Some(file) = &config.file {
-        let content = read(config, file)?;
+        if let Some(ext) = Path::new(file).extension().and_then(|s| s.to_str()) {
+            if allowed_extensions.contains(&ext) {
+                let content = read(config, file)?;
 
-        result.push((file.clone(), content));
+                result.push((file.clone(), content));
+            }
+        }
     }
 
     Ok(result)
