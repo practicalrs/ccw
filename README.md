@@ -2,7 +2,7 @@
 
 Code Cleaner Wrasse (CCW) is a CLI tool that uses a local LLM (via Ollama) to analyze source code, review diffs, detect issues, and generate structured summaries for commits and task management workflows.
 
-It performs static-style analysis for security, correctness, performance, documentation, and acceptance criteria verification - all without sending code or diffs to external services.
+It provides LLM-assisted analysis of source code, including checks for security issues, correctness problems, performance pitfalls, documentation gaps, and acceptance-criteria compliance - all without sending code or diffs to external services.
 
 ## Why Code Cleaner Wrasse?
 
