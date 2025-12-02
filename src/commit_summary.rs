@@ -63,7 +63,7 @@ pub async fn run(config: Arc<Config>, code: &str) -> Result<()> {
     let end_date = Utc::now();
 
     let delta = end_date - start_date;
-    println!("\n\nSummarized in {} seconds.\n", delta.num_seconds());
+    println!("\n\nCommit summary generated in {} seconds.\n", delta.num_seconds());
 
     Ok(())
 }
