@@ -42,6 +42,10 @@ pub struct Args {
     /// Start line
     #[arg(long, short)]
     pub start_line: Option<u32>,
+
+    /// Timeout
+    #[arg(long, short)]
+    pub timeout: Option<u64>,
 }
 
 #[derive(Clone, Debug)]

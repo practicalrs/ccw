@@ -64,8 +64,8 @@ pub async fn request(
     let url = format!("{}/api/chat", config.ollama_host);
 
     let response = reqwest::ClientBuilder::new()
-        .connect_timeout(Duration::from_secs(240))
-        .timeout(Duration::from_secs(240))
+        .connect_timeout(Duration::from_secs(config.timeout))
+        .timeout(Duration::from_secs(config.timeout))
         .build()?
         .post(url)
         .json(&ollama_request)

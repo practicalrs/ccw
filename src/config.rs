@@ -16,6 +16,7 @@ pub struct Config {
     pub ollama_host: String,
     pub skip_larger: Option<u32>,
     pub start_line: Option<u32>,
+    pub timeout: u64,
 }
 
 impl Config {
@@ -30,6 +31,7 @@ impl Config {
         ollama_host: String,
         skip_larger: Option<u32>,
         start_line: Option<u32>,
+        timeout: u64,
     ) -> Self {
         Self {
             dir,
@@ -41,6 +43,7 @@ impl Config {
             ollama_host,
             skip_larger,
             start_line,
+            timeout,
         }
     }
 }
@@ -61,6 +64,7 @@ pub fn load(args: Args) -> Result<Config> {
     };
     let skip_larger = args.skip_larger;
     let start_line = args.start_line;
+    let timeout = args.timeout.unwrap_or(300);
 
     let config = Config::new(
         dir,
@@ -72,6 +76,7 @@ pub fn load(args: Args) -> Result<Config> {
         ollama_host,
         skip_larger,
         start_line,
+        timeout,
     );
 
     Ok(config)
