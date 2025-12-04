@@ -23,6 +23,10 @@ pub struct Args {
     #[arg(long, short)]
     pub file: Option<String>,
 
+    /// Keep alive in seconds
+    #[arg(long, short)]
+    pub keep_alive: Option<u16>,
+
     /// Max attempts
     #[arg(long)]
     pub max_attempts: Option<u8>,

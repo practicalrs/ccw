@@ -16,6 +16,7 @@ pub struct Message {
 
 #[derive(Debug, Serialize)]
 pub struct OllamaRequest {
+    pub keep_alive: u16,
     pub messages: Vec<Message>,
     pub model: String,
     pub options: Options,
@@ -55,6 +56,7 @@ pub async fn request(
         .unwrap_or(DEFAULT_CODE_MODEL.to_string());
 
     let ollama_request = OllamaRequest {
+        keep_alive: config.keep_alive,
         messages: messages.clone(),
         model: model.clone(),
         options,

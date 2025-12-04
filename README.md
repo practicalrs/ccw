@@ -53,11 +53,15 @@ CCW provides several modes, each focused on a specific code review or task manag
 
 ### Common Parameters
 
+* `--keep-alive` – sets how many seconds the model should remain loaded in Ollama. The default is 0, as keeping the model cached caused issues in some cases.
+
 * `--max-attempts` - maximum number of retry attempts when communicating with the Ollama server.
 
 * `--model` - overrides the default model (qwen2.5-coder:14b).
 
 * `--skip-larger` - skips files requiring a context window larger than the hardware can support. Example: 30000 works for systems with 8 GB VRAM + 64 GB RAM when offloading qwen2.5-coder:14b.
+
+* `--timeout` – sets the timeout value used for both connect_timeout and timeout when communicating with the Ollama server.
 
 ## Modes
 

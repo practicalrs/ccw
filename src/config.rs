@@ -10,6 +10,7 @@ pub struct Config {
     pub dir: Option<String>,
     pub end_line: Option<u32>,
     pub file: Option<String>,
+    pub keep_alive: u16,
     pub max_attempts: u8,
     pub mode: Mode,
     pub model: Option<String>,
@@ -25,6 +26,7 @@ impl Config {
         dir: Option<String>,
         end_line: Option<u32>,
         file: Option<String>,
+        keep_alive: u16,
         max_attempts: u8,
         mode: Mode,
         model: Option<String>,
@@ -37,6 +39,7 @@ impl Config {
             dir,
             end_line,
             file,
+            keep_alive,
             max_attempts,
             mode,
             model,
@@ -52,6 +55,7 @@ pub fn load(args: Args) -> Result<Config> {
     let dir = args.dir;
     let end_line = args.end_line;
     let file = args.file;
+    let keep_alive = args.keep_alive.unwrap_or(0);
     let max_attempts = args.max_attempts.unwrap_or(3);
     let mode = if let Some(mode) = args.mode {
         Mode::from_str(&mode)?
@@ -70,6 +74,7 @@ pub fn load(args: Args) -> Result<Config> {
         dir,
         end_line,
         file,
+        keep_alive,
         max_attempts,
         mode,
         model,
