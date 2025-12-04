@@ -22,6 +22,8 @@ Your output must follow these rules:
 9. If the diff is longer, produce a list of changes using plain text lines separated by newlines. Do not use bullets, dashes, or numbering; simply separate items with newlines.
 10. Do not invent changes not present in the diff.
 11. Never include characters or formatting that could be interpreted as a Git comment.
+12. The commit title must not exceed 42 characters.
+13. Each line of the summary must not exceed 72 characters.
 
 Only output the commit title and the summary. Do not add commentary or disclaimers.";
 
