@@ -5,7 +5,7 @@ use serde::{Deserialize, Serialize};
 use std::sync::Arc;
 use tokio::time::Duration;
 
-pub const DEFAULT_CODE_MODEL: &str = "qwen2.5-coder:14b";
+pub const DEFAULT_CODE_MODEL: &str = "qwen3-coder:30b";
 pub const DEFAULT_CODE_NUM_CTX: u32 = 16384;
 
 #[derive(Clone, Debug, Deserialize, Serialize)]

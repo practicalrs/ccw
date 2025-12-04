@@ -34,7 +34,7 @@ cargo install --force --locked --path .
 * Default model - pull the recommended default model:
 
 ```sh
-ollama pull qwen2.5-coder:14b
+ollama pull qwen3-coder:30b
 ```
 
 You may use a different model with the `--model` parameter.
@@ -57,9 +57,9 @@ CCW provides several modes, each focused on a specific code review or task manag
 
 * `--max-attempts` - maximum number of retry attempts when communicating with the Ollama server.
 
-* `--model` - overrides the default model (qwen2.5-coder:14b).
+* `--model` - overrides the default model (qwen3-coder:30b).
 
-* `--skip-larger` - skips files requiring a context window larger than the hardware can support. Example: 30000 works for systems with 8 GB VRAM + 64 GB RAM when offloading qwen2.5-coder:14b.
+* `--skip-larger` - skips files requiring a context window larger than the hardware can support. Example: 30000 works for systems with 8 GB VRAM + 64 GB RAM when offloading qwen3-coder:30b.
 
 * `--timeout` – sets the timeout value used for both connect_timeout and timeout when communicating with the Ollama server.
 
