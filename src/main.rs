@@ -8,6 +8,7 @@ mod commit_review;
 mod commit_summary;
 mod config;
 mod error;
+mod explain;
 mod file;
 mod ollama;
 mod performance;

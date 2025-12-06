@@ -15,6 +15,7 @@ pub struct Config {
     pub mode: Mode,
     pub model: Option<String>,
     pub ollama_host: String,
+    pub question: Option<String>,
     pub skip_larger: Option<u32>,
     pub start_line: Option<u32>,
     pub timeout: u64,
@@ -31,6 +32,7 @@ impl Config {
         mode: Mode,
         model: Option<String>,
         ollama_host: String,
+        question: Option<String>,
         skip_larger: Option<u32>,
         start_line: Option<u32>,
         timeout: u64,
@@ -44,6 +46,7 @@ impl Config {
             mode,
             model,
             ollama_host,
+            question,
             skip_larger,
             start_line,
             timeout,
@@ -66,6 +69,7 @@ pub fn load(args: Args) -> Result<Config> {
     let Ok(ollama_host) = std::env::var("OLLAMA_HOST") else {
         return Err(Box::new(Error::OllamaHostAddresMissing));
     };
+    let question = args.question;
     let skip_larger = args.skip_larger;
     let start_line = args.start_line;
     let timeout = args.timeout.unwrap_or(300);
@@ -79,6 +83,7 @@ pub fn load(args: Args) -> Result<Config> {
         mode,
         model,
         ollama_host,
+        question,
         skip_larger,
         start_line,
         timeout,

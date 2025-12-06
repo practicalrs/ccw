@@ -1,5 +1,5 @@
 use crate::{
-    Result, checker, commit_review, commit_summary, config, error::Error, file, performance, task_comment, task_criteria_check, task_description
+    Result, checker, commit_review, commit_summary, config, explain, error::Error, file, performance, task_comment, task_criteria_check, task_description
 };
 use clap::Parser;
 use std::{
@@ -39,6 +39,10 @@ pub struct Args {
     #[arg(long, short)]
     pub model: Option<String>,
 
+    /// Question
+    #[arg(long, short)]
+    pub question: Option<String>,
+
     /// Skip larger than tokens
     #[arg(long)]
     pub skip_larger: Option<u32>,
@@ -57,6 +61,7 @@ pub enum Mode {
     Checker,
     CommitReview,
     CommitSummary,
+    Explain,
     Performance,
     TaskComment,
     TaskCriteriaCheck,
@@ -73,6 +78,7 @@ impl FromStr for Mode {
             "checker" => Ok(Mode::Checker),
             "commit_review" => Ok(Mode::CommitReview),
             "commit_summary" => Ok(Mode::CommitSummary),
+            "explain" => Ok(Mode::Explain),
             "performance" => Ok(Mode::Performance),
             "task_comment" => Ok(Mode::TaskComment),
             "task_criteria_check" => Ok(Mode::TaskCriteriaCheck),
@@ -87,7 +93,7 @@ pub async fn run() -> Result<()> {
     let config = Arc::new(config::load(args)?);
 
     match config.mode {
-        Mode::Checker | Mode::Performance => {
+        Mode::Checker | Mode::Explain | Mode::Performance => {
             let files = file::read_files(&config)?;
             let files_count = files.len();
             let mut i = 1;
@@ -97,6 +103,7 @@ pub async fn run() -> Result<()> {
 
                 match config.mode {
                     Mode::Checker => checker::run(config.clone(), &code).await?,
+                    Mode::Explain => explain::run(config.clone(), &code).await?,
                     Mode::Performance => performance::run(config.clone(), &code).await?,
                     _ => {}
                 }
