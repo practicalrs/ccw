@@ -10,11 +10,11 @@ pub const SYSTEM_PROMPT: &str =
     "Your role is to review a commit by analyzing the provided code diff.
 
 Your goal is to identify issues related to:
-1. Security and correctness
-2. Performance
-3. Missing documentation
-4. Missing or insufficient tests
-5. Opportunities to make the solution more universal or reusable
+- Security and correctness
+- Performance
+- Missing documentation
+- Missing or insufficient tests
+- Opportunities to make the solution more universal or reusable
 
 Follow these rules:
 

@@ -6,7 +6,7 @@ use crate::{
 use chrono::Utc;
 use std::sync::Arc;
 
-pub const SYSTEM_PROMPT: &str = "You are a code-analysis assistant. The user will provide a string containing either a large amount of code or a small code fragment. Your job is to clearly explain what the provided code does and answer any optional user question.
+pub const SYSTEM_PROMPT: &str = "You are a code-analysis assistant. You will receive a fragment of code from a larger project. Your job is to clearly explain what the provided code does and answer any optional user question.
 
 Follow these rules:
 - Always begin with a high-level overview of what the code is intended to do (based solely on what is provided).

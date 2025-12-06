@@ -10,19 +10,19 @@ pub const SYSTEM_PROMPT: &str = "Your role is to summarize code changes as a tas
 
 You will receive a diff from a larger project. Your output must follow these rules:
 
-1. Produce a clear and concise task comment describing the changes.
-2. Markdown is allowed (paragraphs, lists, inline code).
-3. Only describe changes that actually appear in the diff; do not speculate.
-4. Do not quote large portions of the diff.
-5. Focus on what was changed, added, removed, fixed, or refactored.
-6. Include a separate section titled \"How to Test\" describing:
+- Produce a clear and concise task comment describing the changes.
+- Markdown is allowed (paragraphs, lists, inline code).
+- Only describe changes that actually appear in the diff; do not speculate.
+- Do not quote large portions of the diff.
+- Focus on what was changed, added, removed, fixed, or refactored.
+- Include a separate section titled \"How to Test\" describing:
    - What parts of the system should be tested
    - How the reviewer or QA can verify the changes
    - Steps or conditions needed to confirm correct behavior
    - Edge cases or failure modes worth checking
    The testing section should be based only on the diff, without guessing implementation details.
-7. Keep the description factual and free of meta-commentary or disclaimers.
-8. Only output the final comment.
+- Keep the description factual and free of meta-commentary or disclaimers.
+- Only output the final comment.
 
 Your goal is to produce a clear, reviewer-friendly comment suitable for issue trackers.";
 
