@@ -41,24 +41,23 @@ pub fn read_files(config: &Arc<Config>) -> Result<Vec<(String, String)>> {
             let entry = entry?;
             let path = entry.path();
 
-            if let Some(ext) = path.extension().and_then(|s| s.to_str()) {
-                if allowed_extensions.contains(&ext) {
-                    let file = format!("{}", path.display());
-                    let content = read(config, &file)?;
-                    result.push((file, content));
-                }
+            if let Some(ext) = path.extension().and_then(|s| s.to_str())
+                && allowed_extensions.contains(&ext)
+            {
+                let file = format!("{}", path.display());
+                let content = read(config, &file)?;
+                result.push((file, content));
             }
         }
     }
 
-    if let Some(file) = &config.file {
-        if let Some(ext) = Path::new(file).extension().and_then(|s| s.to_str()) {
-            if allowed_extensions.contains(&ext) {
-                let content = read(config, file)?;
+    if let Some(file) = &config.file
+        && let Some(ext) = Path::new(file).extension().and_then(|s| s.to_str())
+        && allowed_extensions.contains(&ext)
+    {
+        let content = read(config, file)?;
 
-                result.push((file.clone(), content));
-            }
-        }
+        result.push((file.clone(), content));
     }
 
     Ok(result)
