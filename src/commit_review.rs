@@ -6,7 +6,8 @@ use crate::{
 use chrono::Utc;
 use std::sync::Arc;
 
-pub const SYSTEM_PROMPT: &str = "Your role is to review a commit by analyzing the provided code diff.
+pub const SYSTEM_PROMPT: &str =
+    "Your role is to review a commit by analyzing the provided code diff.
 
 Your goal is to identify issues related to:
 1. Security and correctness
@@ -92,7 +93,10 @@ pub async fn run(config: Arc<Config>, code: &str) -> Result<()> {
 
     let num_ctx = (u32::try_from(length)? / 4) + 4096;
 
-    println!("Context window = {num_ctx}\tkeep_alive = {}\ttimeout = {}\n\n", config.keep_alive, config.timeout);
+    println!(
+        "Context window = {num_ctx}\tkeep_alive = {}\ttimeout = {}\n\n",
+        config.keep_alive, config.timeout
+    );
 
     if let Some(skip_larger) = config.skip_larger
         && num_ctx > skip_larger
@@ -109,7 +113,10 @@ pub async fn run(config: Arc<Config>, code: &str) -> Result<()> {
     let end_date = Utc::now();
 
     let delta = end_date - start_date;
-    println!("\n\nCommit review generated in {} seconds.\n", delta.num_seconds());
+    println!(
+        "\n\nCommit review generated in {} seconds.\n",
+        delta.num_seconds()
+    );
 
     Ok(())
 }

@@ -1,5 +1,6 @@
 use crate::{
-    Result, checker, commit_review, commit_summary, config, explain, error::Error, file, performance, task_comment, task_criteria_check, task_description
+    Result, checker, commit_review, commit_summary, config, error::Error, explain, file,
+    performance, task_comment, task_criteria_check, task_description,
 };
 use clap::Parser;
 use std::{
@@ -111,7 +112,11 @@ pub async fn run() -> Result<()> {
                 i += 1;
             }
         }
-        Mode::CommitReview | Mode::CommitSummary | Mode::TaskComment | Mode::TaskCriteriaCheck | Mode::TaskDescription => {
+        Mode::CommitReview
+        | Mode::CommitSummary
+        | Mode::TaskComment
+        | Mode::TaskCriteriaCheck
+        | Mode::TaskDescription => {
             let mut code = String::new();
             stdin().read_to_string(&mut code)?;
 

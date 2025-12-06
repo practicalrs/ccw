@@ -26,29 +26,14 @@ pub fn read_files(config: &Arc<Config>) -> Result<Vec<(String, String)>> {
     let mut result = vec![];
 
     let allowed_extensions = vec![
-        // C
-        "c",
-        "h",
-        // C#
-        "cs",
-        // C++
-        "cpp",
-        "hpp",
-        "cc",
-        "hh",
-        "cxx",
-        "hxx",
-        // Go
-        "go",
-        // Java ;)
-        "java",
-        "js",
-        // Python
-        "py",
-        // Rust
-        "rs",
-        // TypeScript
-        "ts",
+        "c", "h", // C
+        "cpp", "hpp", "cc", "hh", "cxx", "hxx", // C++
+        "cs",  // C#
+        "go",  // Go
+        "java", "js", // Java ;)
+        "py", // Python
+        "rs", // Rust
+        "ts", // TypeScript
     ];
 
     if let Some(dir) = &config.dir {
