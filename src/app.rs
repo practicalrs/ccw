@@ -1,6 +1,6 @@
 use crate::{
-    Result, ask, checker, commit_review, commit_summary, config, error::Error, explain, file,
-    performance, task_comment, task_criteria_check, task_description,
+    Result, ask, checker, commit_review, commit_summary, config, criteria_verify, error::Error,
+    explain, file, performance, task_generate, task_review,
 };
 use clap::Parser;
 use std::{
@@ -63,11 +63,11 @@ pub enum Mode {
     Checker,
     CommitReview,
     CommitSummary,
+    CriteriaVerify,
     Explain,
     Performance,
-    TaskComment,
-    TaskCriteriaCheck,
-    TaskDescription,
+    TaskGenerate,
+    TaskReview,
 }
 
 impl FromStr for Mode {
@@ -81,11 +81,11 @@ impl FromStr for Mode {
             "checker" => Ok(Mode::Checker),
             "commit_review" => Ok(Mode::CommitReview),
             "commit_summary" => Ok(Mode::CommitSummary),
+            "criteria_verify" => Ok(Mode::CriteriaVerify),
             "explain" => Ok(Mode::Explain),
             "performance" => Ok(Mode::Performance),
-            "task_comment" => Ok(Mode::TaskComment),
-            "task_criteria_check" => Ok(Mode::TaskCriteriaCheck),
-            "task_description" => Ok(Mode::TaskDescription),
+            "task_generate" => Ok(Mode::TaskGenerate),
+            "task_review" => Ok(Mode::TaskReview),
             _ => Ok(Mode::Checker),
         }
     }
@@ -116,27 +116,25 @@ pub async fn run() -> Result<()> {
         }
         Mode::CommitReview
         | Mode::CommitSummary
-        | Mode::TaskComment
-        | Mode::TaskCriteriaCheck
-        | Mode::TaskDescription => {
+        | Mode::CriteriaVerify
+        | Mode::TaskGenerate
+        | Mode::TaskReview => {
             let mut code = String::new();
             stdin().read_to_string(&mut code)?;
 
             match config.mode {
                 Mode::CommitReview => commit_review::run(config.clone(), &code).await?,
                 Mode::CommitSummary => commit_summary::run(config.clone(), &code).await?,
-                Mode::TaskComment => task_comment::run(config.clone(), &code).await?,
-                Mode::TaskCriteriaCheck => task_criteria_check::run(config.clone(), &code).await?,
-                Mode::TaskDescription => task_description::run(config.clone(), &code).await?,
+                Mode::CriteriaVerify => criteria_verify::run(config.clone(), &code).await?,
+                Mode::TaskGenerate => task_generate::run(config.clone(), &code).await?,
+                Mode::TaskReview => task_review::run(config.clone(), &code).await?,
                 _ => {}
             }
         }
-        Mode::Ask => {
-            match config.mode {
-                Mode::Ask => ask::run(config.clone()).await?,
-                _ => {}
-            }
-        }
+        Mode::Ask => match config.mode {
+            Mode::Ask => ask::run(config.clone()).await?,
+            _ => {}
+        },
     }
 
     Ok(())

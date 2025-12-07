@@ -6,7 +6,8 @@ use crate::{
 use chrono::Utc;
 use std::sync::Arc;
 
-pub const SYSTEM_PROMPT: &str = "You are CCW-TASK-DESCRIPTION. Your role is to summarize code changes as a task description.
+pub const SYSTEM_PROMPT: &str =
+    "You are CCW-TASK-GENERATE. Your role is to summarize code changes as a task description.
 
 You will receive a diff from a larger project. Your output must follow these rules:
 
@@ -83,7 +84,7 @@ pub async fn run(config: Arc<Config>, code: &str) -> Result<()> {
 
     let delta = end_date - start_date;
     println!(
-        "\n\nTask description generated in {} seconds.\n",
+        "\n\nTask generated in {} seconds.\n",
         delta.num_seconds()
     );
 

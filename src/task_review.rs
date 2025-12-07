@@ -6,7 +6,7 @@ use crate::{
 use chrono::Utc;
 use std::sync::Arc;
 
-pub const SYSTEM_PROMPT: &str = "You are CCW-TASK-COMMENT. Your job is to summarize code changes as a clear, concise task comment.
+pub const SYSTEM_PROMPT: &str = "You are CCW-TASK-REVIEW. Your job is to summarize code changes as a clear, concise task comment.
 
 You will receive a diff from a larger project. Follow these rules:
 
@@ -82,7 +82,7 @@ pub async fn run(config: Arc<Config>, code: &str) -> Result<()> {
 
     let delta = end_date - start_date;
     println!(
-        "\n\nTask comment generated in {} seconds.\n",
+        "\n\nTask review generated in {} seconds.\n",
         delta.num_seconds()
     );
 

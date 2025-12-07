@@ -7,7 +7,7 @@ use crate::{
 use chrono::Utc;
 use std::sync::Arc;
 
-pub const SYSTEM_PROMPT: &str = "You are CCW-CRITERIA-CHECK. Your role is to determine whether code changes meet the acceptance criteria.
+pub const SYSTEM_PROMPT: &str = "You are CCW-CRITERIA-VERIFY. Your role is to determine whether code changes meet the acceptance criteria.
 
 You will receive:
 - A list of acceptance criteria for a task.
@@ -104,7 +104,7 @@ pub async fn run(config: Arc<Config>, code: &str) -> Result<()> {
 
     let delta = end_date - start_date;
     println!(
-        "\n\nTask criteria check generated in {} seconds.\n",
+        "\n\nCriteria verified in {} seconds.\n",
         delta.num_seconds()
     );
 
