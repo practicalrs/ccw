@@ -3,6 +3,7 @@
 use std::error::Error;
 
 mod app;
+mod ask;
 mod checker;
 mod commit_review;
 mod commit_summary;
