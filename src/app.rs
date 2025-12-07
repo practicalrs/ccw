@@ -1,6 +1,6 @@
 use crate::{
-    Result, ask, checker, commit_review, commit_summary, config, criteria_verify, design_advice,
-    error::Error, explain, file, performance, task_generate, task_review,
+    Result, ask, checker, commit_review, commit_summary, config, convert_to_rust, criteria_verify,
+    design_advice, error::Error, explain, file, performance, task_generate, task_review,
 };
 use clap::Parser;
 use std::{
@@ -63,6 +63,7 @@ pub enum Mode {
     Checker,
     CommitReview,
     CommitSummary,
+    ConvertToRust,
     CriteriaVerify,
     DesignAdvice,
     Explain,
@@ -82,6 +83,7 @@ impl FromStr for Mode {
             "checker" => Ok(Mode::Checker),
             "commit_review" => Ok(Mode::CommitReview),
             "commit_summary" => Ok(Mode::CommitSummary),
+            "convert_to_rust" => Ok(Mode::ConvertToRust),
             "criteria_verify" => Ok(Mode::CriteriaVerify),
             "design_advice" => Ok(Mode::DesignAdvice),
             "explain" => Ok(Mode::Explain),
@@ -98,7 +100,11 @@ pub async fn run() -> Result<()> {
     let config = Arc::new(config::load(args)?);
 
     match config.mode {
-        Mode::Checker | Mode::DesignAdvice | Mode::Explain | Mode::Performance => {
+        Mode::Checker
+        | Mode::ConvertToRust
+        | Mode::DesignAdvice
+        | Mode::Explain
+        | Mode::Performance => {
             let files = file::read_files(&config)?;
             let files_count = files.len();
             let mut i = 1;
@@ -108,6 +114,7 @@ pub async fn run() -> Result<()> {
 
                 match config.mode {
                     Mode::Checker => checker::run(config.clone(), &code).await?,
+                    Mode::ConvertToRust => convert_to_rust::run(config.clone(), &code).await?,
                     Mode::DesignAdvice => design_advice::run(config.clone(), &code).await?,
                     Mode::Explain => explain::run(config.clone(), &code).await?,
                     Mode::Performance => performance::run(config.clone(), &code).await?,

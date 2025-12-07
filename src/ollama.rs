@@ -142,6 +142,7 @@ pub async fn run_request(
         Mode::Checker => "Checked",
         Mode::CommitReview => "Commit review generated",
         Mode::CommitSummary => "Commit summary generated",
+        Mode::ConvertToRust => "Converted",
         Mode::CriteriaVerify => "Criteria verified",
         Mode::DesignAdvice => "Design advice generated",
         Mode::Explain => "Explained",

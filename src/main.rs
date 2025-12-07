@@ -8,6 +8,7 @@ mod checker;
 mod commit_review;
 mod commit_summary;
 mod config;
+mod convert_to_rust;
 mod criteria_verify;
 mod design_advice;
 mod error;
