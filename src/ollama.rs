@@ -1,5 +1,6 @@
-use crate::{Result, app, config::Config, error::Error};
+use crate::{Result, app, app::Mode, config::Config, error::Error};
 use async_recursion::async_recursion;
+use chrono::{DateTime, Utc};
 use reqwest::StatusCode;
 use serde::{Deserialize, Serialize};
 use std::sync::Arc;
@@ -100,4 +101,58 @@ pub async fn request(
     }
 
     Err(Box::new(Error::OllamaRequestProblem))
+}
+
+pub async fn run_request(
+    config: Arc<Config>,
+    messages: Vec<Message>,
+    start_date: DateTime<Utc>,
+) -> Result<()> {
+    let mut length = 0;
+
+    for message in &messages {
+        length += message.content.len();
+    }
+
+    let num_ctx = (u32::try_from(length)? / 4) + 4096;
+
+    println!(
+        "Context window = {num_ctx}\tkeep_alive = {}\ttimeout = {}\n\n",
+        config.keep_alive, config.timeout
+    );
+
+    if let Some(skip_larger) = config.skip_larger
+        && num_ctx > skip_larger
+    {
+        println!("Context too large. Skipping...");
+
+        return Ok(());
+    }
+
+    let result = request(config.clone(), messages.clone(), Some(num_ctx), 1).await?;
+
+    println!("{result}");
+
+    let end_date = Utc::now();
+
+    let delta = end_date - start_date;
+
+    let task = match config.mode {
+        Mode::Ask => "Answer generated",
+        Mode::Checker => "Checked",
+        Mode::CommitReview => "Commit review generated",
+        Mode::CommitSummary => "Commit summary generated",
+        Mode::CriteriaVerify => "Criteria verified",
+        Mode::Explain => "Explained",
+        Mode::Performance => "Checked",
+        Mode::TaskGenerate => "Task generated",
+        Mode::TaskReview => "Task review generated",
+    };
+
+    println!(
+        "\n\n{task} in {} seconds.\n",
+        delta.num_seconds()
+    );
+
+    Ok(())
 }

@@ -63,36 +63,7 @@ pub async fn run(config: Arc<Config>, code: &str) -> Result<()> {
     };
     messages.push(message);
 
-    let mut length = 0;
-    length += SYSTEM_PROMPT.len();
-    length += prompt.len();
-
-    let num_ctx = (u32::try_from(length)? / 4) + 4096;
-
-    println!(
-        "Context window = {num_ctx}\tkeep_alive = {}\ttimeout = {}\n\n",
-        config.keep_alive, config.timeout
-    );
-
-    if let Some(skip_larger) = config.skip_larger
-        && num_ctx > skip_larger
-    {
-        println!("Context too large. Skipping...");
-
-        return Ok(());
-    }
-
-    let result = ollama::request(config.clone(), messages.clone(), Some(num_ctx), 1).await?;
-
-    println!("{result}");
-
-    let end_date = Utc::now();
-
-    let delta = end_date - start_date;
-    println!(
-        "\n\nCommit summary generated in {} seconds.\n",
-        delta.num_seconds()
-    );
+    ollama::run_request(config, messages, start_date).await?;
 
     Ok(())
 }
