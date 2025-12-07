@@ -9,6 +9,7 @@ mod commit_review;
 mod commit_summary;
 mod config;
 mod criteria_verify;
+mod design_advice;
 mod error;
 mod explain;
 mod file;

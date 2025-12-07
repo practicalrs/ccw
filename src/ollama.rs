@@ -143,16 +143,14 @@ pub async fn run_request(
         Mode::CommitReview => "Commit review generated",
         Mode::CommitSummary => "Commit summary generated",
         Mode::CriteriaVerify => "Criteria verified",
+        Mode::DesignAdvice => "Design advice generated",
         Mode::Explain => "Explained",
         Mode::Performance => "Checked",
         Mode::TaskGenerate => "Task generated",
         Mode::TaskReview => "Task review generated",
     };
 
-    println!(
-        "\n\n{task} in {} seconds.\n",
-        delta.num_seconds()
-    );
+    println!("\n\n{task} in {} seconds.\n", delta.num_seconds());
 
     Ok(())
 }
