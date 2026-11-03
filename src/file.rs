@@ -30,8 +30,8 @@ pub fn read_files(config: &Arc<Config>) -> Result<Vec<(String, String)>> {
         "cpp", "hpp", "cc", "hh", "cxx", "hxx", // C++
         "cs",  // C#
         "go",  // Go
-        "java", "js", // Java ;)
-        "py", // Python
+        "java", "js", "jsx", // Java ;)
+        "json", "py", // Python
         "rs", // Rust
         "ts", // TypeScript
     ];

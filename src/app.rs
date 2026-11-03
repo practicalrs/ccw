@@ -1,6 +1,7 @@
 use crate::{
     Result, ask, checker, commit_review, commit_summary, config, convert_to_rust, criteria_verify,
-    design_advice, error::Error, explain, file, performance, task_generate, task_review,
+    design_advice, error::Error, explain, file, malware_audit, performance, task_generate,
+    task_review,
 };
 use clap::Parser;
 use std::{
@@ -67,6 +68,7 @@ pub enum Mode {
     CriteriaVerify,
     DesignAdvice,
     Explain,
+    MalwareAudit,
     Performance,
     TaskGenerate,
     TaskReview,
@@ -87,6 +89,7 @@ impl FromStr for Mode {
             "criteria_verify" => Ok(Mode::CriteriaVerify),
             "design_advice" => Ok(Mode::DesignAdvice),
             "explain" => Ok(Mode::Explain),
+            "malware_audit" => Ok(Mode::MalwareAudit),
             "performance" => Ok(Mode::Performance),
             "task_generate" => Ok(Mode::TaskGenerate),
             "task_review" => Ok(Mode::TaskReview),
@@ -104,6 +107,7 @@ pub async fn run() -> Result<()> {
         | Mode::ConvertToRust
         | Mode::DesignAdvice
         | Mode::Explain
+        | Mode::MalwareAudit
         | Mode::Performance => {
             let files = file::read_files(&config)?;
             let files_count = files.len();
@@ -117,6 +121,7 @@ pub async fn run() -> Result<()> {
                     Mode::ConvertToRust => convert_to_rust::run(config.clone(), &code).await?,
                     Mode::DesignAdvice => design_advice::run(config.clone(), &code).await?,
                     Mode::Explain => explain::run(config.clone(), &code).await?,
+                    Mode::MalwareAudit => malware_audit::run(config.clone(), &code).await?,
                     Mode::Performance => performance::run(config.clone(), &code).await?,
                     _ => {}
                 }

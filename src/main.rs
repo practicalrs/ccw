@@ -14,6 +14,7 @@ mod design_advice;
 mod error;
 mod explain;
 mod file;
+mod malware_audit;
 mod ollama;
 mod performance;
 mod task_generate;
